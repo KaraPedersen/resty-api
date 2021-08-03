@@ -1,39 +1,41 @@
-// import { exists } from 'fs';
 import React, { Component } from 'react';
+import Header from '../components/app/Header';
 import Form from '../components/form/Form';
 import HistoryList from '../components/history/HistoryList';
 import Payload from '../components/payload/Payload';
-import  { fetchApi } from '../services/resty.js';
+import { fetchApi } from '../services/resty.js';
+import styles from './Resty.css';
 
 export default class Resty extends Component {
   state = {
     search: '',
     method: '',
     body: '',
-    payload: '',
+    payload: { 'Hello': 'I am bored. Please make a fetch!' },
     history: [],
   }
 
   componentDidMount() {
-    const exists = localStorage.getItem('HISTORY');
-    exists
-      ? (this.setState({ history: JSON.parse(exists)
-}))
-      : (localStorage.setItem('HISTORY', '[]'));
+    const historyExists = localStorage.getItem('HISTORY');
+    historyExists 
+      ? (this.setState({ history: JSON.parse(historyExists) }))
+      : (localStorage.setItem('HISTORY', '[]')); 
   }
 
-  async fetchApi() {
+  async fetchAPI() {
     const { search, method, body } = this.state;
+    
+    const res = await fetchApi(search, method, body);
+    const payload = JSON.parse(res);
 
-    const payload = await fetchApi(search, method, body);
     this.setState({ payload });
   }
 
   getAndSetLocalStorage() {
     const { search, method, body } = this.state;
-    const recent = {
+    const recent = { 
       id: search + method + body,
-      search,
+      search, 
       method, 
       body
     };
@@ -45,56 +47,61 @@ export default class Resty extends Component {
     localStorage.setItem('HISTORY', newHistory);
 
     this.setState({ history: parsedHistory });
+  }
+ 
+  handleChange = ({ target }) => {
+    this.setState({ [target.name]: target.value });  
+  }
 
-    handleChange = ({ target }) => {
-      this.setState({  [target.name]: target.value });
-    }
-
-    handleSubmit = async (e) => {
-      e.preventDefault();
-
-      this.fetchApi();
-      this.getAndSetLocalStorage();
-    }
+  handleSubmit = async (e) => {
+    e.preventDefault();
     
-    handleClick = ({ target }) => {
-      let match;
+    this.fetchAPI();
+    this.getAndSetLocalStorage();
+  }
 
-      this.state.history.forEach(eachHistory => {
+  handleClick = ({ target }) => {
+    let match;
 
-        if(eachHistory.id === target.id) {
-          match = eachHistory;
-        }
-      });
+    this.state.history.forEach(eachHistory => {
 
-      this.setState({
-        search: match.search,
-        method: match,method,
-        body: match.body
-      });
-    }
+      if(eachHistory.id === target.id) {
+        match = eachHistory;
+      }
+    });
 
-    render() {
-      const { search, method, body, payload, history } = this.state;
+    this.setState({ 
+      search: match.search,
+      method: match.method,
+      body: match.body
+    });
+  }
 
-      return (
-        <>
-          <Form
-            search={search}
-            method={method}
-            body={body}
-            onChange={this.handleChange}
-            onSubmit={this.handleSubmit}
-          />
-          <Payload
-            payload={payload}
-          /> 
+  render() {
+    const { search, method, body, payload, history } = this.state;
+    
+    return (
+      <>
+        <Header />
+        <section className={styles.Resty}>
+          <div>
+            <Form
+              search={search}
+              method={method}
+              body={body}
+              onChange={this.handleChange}
+              onSubmit={this.handleSubmit}
+            />
+            <Payload 
+              payload={payload} 
+            />
+          </div>
           <HistoryList
             history={history}
             onClick={this.handleClick}
-          />   
-          </>  
-      );
-    }
+          />
+        </section>
+      </>
+    );
   }
 }
