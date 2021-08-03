@@ -48,6 +48,7 @@ export default class Resty extends Component {
 
     this.setState({ history: parsedHistory });
   }
+  //comment her to push changes
  
   handleChange = ({ target }) => {
     this.setState({ [target.name]: target.value });  
