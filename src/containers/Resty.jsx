@@ -1,4 +1,4 @@
-import { exists } from 'fs';
+// import { exists } from 'fs';
 import React, { Component } from 'react';
 import Form from '../components/form/Form';
 import HistoryList from '../components/history/HistoryList';
@@ -18,7 +18,7 @@ export default class Resty extends Component {
     const exists = localStorage.getItem('HISTORY');
     exists
       ? (this.setState({ history: JSON.parse(exists)
-      }))
+}))
       : (localStorage.setItem('HISTORY', '[]'));
   }
 
@@ -31,7 +31,12 @@ export default class Resty extends Component {
 
   getAndSetLocalStorage() {
     const { search, method, body } = this.state;
-    const recent = { search, method, body };
+    const recent = {
+      id: search + method + body,
+      search,
+      method, 
+      body
+    };
 
     const parsedHistory = JSON.parse(localStorage.getItem('HISTORY'));
     parsedHistory.push(recent);
@@ -49,8 +54,24 @@ export default class Resty extends Component {
       e.preventDefault();
 
       this.fetchApi();
-
       this.getAndSetLocalStorage();
+    }
+    
+    handleClick = ({ target }) => {
+      let match;
+
+      this.state.history.forEach(eachHistory => {
+
+        if(eachHistory.id === target.id) {
+          match = eachHistory;
+        }
+      });
+
+      this.setState({
+        search: match.search,
+        method: match,method,
+        body: match.body
+      });
     }
 
     render() {
@@ -70,6 +91,7 @@ export default class Resty extends Component {
           /> 
           <HistoryList
             history={history}
+            onClick={this.handleClick}
           />   
           </>  
       );
