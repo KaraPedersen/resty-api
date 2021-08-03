@@ -67,7 +67,10 @@ export default class Resty extends Component {
           />
           <Payload
             payload={payload}
-          />  
+          /> 
+          <HistoryList
+            history={history}
+          />   
           </>  
       );
     }
