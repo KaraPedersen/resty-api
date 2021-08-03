@@ -1,11 +1,11 @@
 import React from 'react';
 import { render, cleanup } from '@testing-library/react';
-import Form from './Form';
+import Payload from './Payload';
 
-describe('Form component', () => {
+describe('Payload component', () => {
   afterEach(() => cleanup());
-  it('renders Form', () => {
-    const { asFragment } = render(<Form />);
+  it('renders Payload', () => {
+    const { asFragment } = render(<Payload />);
     expect(asFragment()).toMatchSnapshot();
   });
 });
