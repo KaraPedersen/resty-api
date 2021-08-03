@@ -271,7 +271,7 @@ exports[`App component renders App 1`] = `
                             class="string-value"
                             style="cursor: default;"
                           >
-                            "I am bored. Please make a fetch!"
+                            "Please make a fetch!"
                           </span>
                         </div>
                       </div>
