@@ -11,8 +11,8 @@ const Body = ({ body, onChange }) => (
       value={body}
       onChange={onChange}
     >
-    </textarea>  
-  </> 
+    </textarea>
+  </>
 );
 
 Body.propTypes = {

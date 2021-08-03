@@ -14,6 +14,7 @@ describe('Resty Container', () => {
       { target: 
         { value: 'https://aztro.sameerkumar.website/?sign=pisces&day=today' } 
       });
+    // eslint-disable-next-line max-len
     expect(urlInput.value).toBe('https://aztro.sameerkumar.website/?sign=pisces&day=today');
 
     //test method component
